@@ -266,7 +266,6 @@ namespace ConsoleApp1
             Console.WriteLine("90-100: " + testResults.Where(r => r >= 90 && r <= 100).Count());
             Console.WriteLine();
 
-
             //9: Система учета студентов
             string[] students = {
     "Иван-85-90-88",
@@ -276,49 +275,73 @@ namespace ConsoleApp1
     "Сергей-65-60-62"
 };
 
-            // Функция для получения среднего балла
-            double GetAverageGrade(string studentData)
-            {
-                var parts = studentData.Split('-');
-                double avg = (Convert.ToDouble(parts[1]) + Convert.ToDouble(parts[2]) + Convert.ToDouble(parts[3])) / 3;
-                return avg;
-            }
-
-            // Студенты со средним баллом > 80
-            var goodStudents = students.Where(s => GetAverageGrade(s) > 80);
+            // Студенты со средним баллом > 80 
             Console.WriteLine("Студенты со средним баллом > 80:");
-            foreach (var student in goodStudents)
+            foreach (var student in students)
             {
-                var name = student.Split('-')[0];
-                double avg = GetAverageGrade(student);
-                Console.WriteLine($"  - {name}: {avg:F2}");
+                var parts = student.Split('-');
+                var name = parts[0];
+                var math = Convert.ToDouble(parts[1]);
+                var physics = Convert.ToDouble(parts[2]);
+                var chemistry = Convert.ToDouble(parts[3]);
+                var avg = (math + physics + chemistry) / 3.0;
+
+                if (avg > 80)
+                {
+                    Console.WriteLine($"  - {name}: {avg:F2}");
+                }
             }
 
-            // Отличники (средний > 90) и двоечники (средний < 70)
-            var topStudents = students.Where(s => GetAverageGrade(s) > 90);
-            var poorStudents = students.Where(s => GetAverageGrade(s) < 70);
-
+            // Отличники (средний > 90) 
             Console.WriteLine("Отличники:");
-            foreach (var student in topStudents)
+            var topStudents = from student in students
+                              let parts = student.Split('-')
+                              let name = parts[0]
+                              let math = Convert.ToDouble(parts[1])
+                              let physics = Convert.ToDouble(parts[2])
+                              let chemistry = Convert.ToDouble(parts[3])
+                              let avg = (math + physics + chemistry) / 3.0
+                              where avg > 90
+                              select name;
+
+            foreach (var name in topStudents)
             {
-                Console.WriteLine($"  - {student.Split('-')[0]}");
+                Console.WriteLine($"  - {name}");
             }
 
+            // Двоечники (средний < 70) 
             Console.WriteLine("Двоечники:");
-            foreach (var student in poorStudents)
+            var poorStudents = from student in students
+                               let parts = student.Split('-')
+                               let name = parts[0]
+                               let math = Convert.ToDouble(parts[1])
+                               let physics = Convert.ToDouble(parts[2])
+                               let chemistry = Convert.ToDouble(parts[3])
+                               let avg = (math + physics + chemistry) / 3.0
+                               where avg < 70
+                               select name;
+
+            foreach (var name in poorStudents)
             {
-                Console.WriteLine($"  - {student.Split('-')[0]}");
+                Console.WriteLine($"  - {name}");
             }
 
             // Рейтинг студентов
-            var ranking = students.OrderByDescending(s => GetAverageGrade(s));
             Console.WriteLine("Рейтинг студентов:");
+            var ranking = from student in students
+                          let parts = student.Split('-')
+                          let name = parts[0]
+                          let math = Convert.ToDouble(parts[1])
+                          let physics = Convert.ToDouble(parts[2])
+                          let chemistry = Convert.ToDouble(parts[3])
+                          let avg = (math + physics + chemistry) / 3.0
+                          orderby avg descending
+                          select new { Name = name, Average = avg };
+
             int place = 1;
             foreach (var student in ranking)
             {
-                var name = student.Split('-')[0];
-                double avg = GetAverageGrade(student);
-                Console.WriteLine($"  {place}. {name}: {avg:F2}");
+                Console.WriteLine($"  {place}. {student.Name}: {student.Average:F2}");
                 place++;
             }
         }

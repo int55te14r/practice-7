@@ -200,9 +200,8 @@ namespace ConsoleApp1
 
             //7: Каталог товаров
             {
+                string[] products =
                 {
-                    string[] products =
-                    {
             "Ноутбук-1200-Электроника",
             "Смартфон-800-Электроника",
             "Футболка-25-Одежда",
@@ -212,64 +211,34 @@ namespace ConsoleApp1
             "Наушники-100-Электроника",
             "Кроссовки-80-Одежда",
         };
-                    Console.WriteLine("КАТАЛОГ ТОВАРОВ");
-                    Console.WriteLine("Товары в диапазоне 50-200:");
-                    var priceRange = products.Where(p =>
-                    {
-                        var price = Convert.ToDouble(p.Split('-')[1]);
-                        return price >= 50 && price <= 200;
-                    });
 
+                Console.WriteLine("КАТАЛОГ ТОВАРОВ");
 
-                    foreach (var product in priceRange)
-                    {
-                        var parts = product.Split('-');
-                        Console.WriteLine($"{parts[0]} - {parts[1]} - {parts[2]}");
+                // Фильтрация без return
+                Console.WriteLine("Товары в диапазоне 50-200:");
+                var priceRange = products.Where(p => Convert.ToDouble(p.Split('-')[1]) >= 50 && Convert.ToDouble(p.Split('-')[1]) <= 200);
 
-                    }
-                    Console.WriteLine();
+                foreach (var product in priceRange)
+                    Console.WriteLine(product.Replace('-', ' '));
 
+                // Сортировка по возрастанию без return
+                Console.WriteLine("\nСортировка по возрастанию:");
+                var sortedAsc = products.OrderBy(p => Convert.ToDouble(p.Split('-')[1]));
+                foreach (var p in sortedAsc) Console.WriteLine(p);
 
-                    Console.WriteLine("Товары отсортированные по цене (возрастание):");
-                    var sortedByPriceAsc = products.OrderBy(p => Convert.ToDouble(p.Split('-')[1]));
-                    foreach (var product in sortedByPriceAsc)
-                    {
-                        var parts = product.Split('-');
-                        Console.WriteLine($"{parts[0]} - {parts[1]} - {parts[2]}");
-                    }
-                    Console.WriteLine();
+                // Средняя цена без return
+                double avg = products.Average(p => Convert.ToDouble(p.Split('-')[1]));
+                Console.WriteLine($"\nСредняя цена: {avg}");
 
+                // Количество по категориям без return
+                Console.WriteLine("\nКатегории:");
+                products.Select(p => p.Split('-')[2])
+                        .Distinct()
+                        .ToList()
+                        .ForEach(cat => Console.WriteLine($"{cat}: {products.Count(p => p.Contains(cat))}"));
 
-                    Console.WriteLine("Товары отсортированные по цене (убывание):");
-                    var sortedByPriceDesc = products.OrderByDescending(p => Convert.ToDouble(p.Split('-')[1]));
-                    foreach (var product in sortedByPriceDesc)
-                    {
-                        var parts = product.Split('-');
-                        Console.WriteLine($"{parts[0]} - {parts[1]} - {parts[2]}");
-                    }
-                    Console.WriteLine();
-
-                    Console.WriteLine("Количество товаров по категориям:");
-                    var categories = products.Select(p => p.Split('-')[2]).Distinct();
-                    foreach (var category in categories)
-                    {
-                        var count = products.Count(p => p.Split('-')[2] == category);
-                        Console.WriteLine($"{category}: {count} товаров");
-                        //Where() - фильтрация по условию
-
-                        //OrderBy() / OrderByDescending() - сортировка
-
-                        //First() - получение первого элемента
-
-                        //Average() - вычисление среднего значения
-
-                        //Count() - подсчет элементов
-
-                        //Select() + Distinct() - получение уникальных категорий
-                    }
-
-                    //8: Анализ результатов тестирования
-                    int[] testResults = { 85, 92, 78, 95, 88, 76, 91, 87, 94, 81, 89, 77, 90, 86, 93 };
+                //8: Анализ результатов тестирования
+                int[] testResults = { 85, 92, 78, 95, 88, 76, 91, 87, 94, 81, 89, 77, 90, 86, 93 };
 
                     // Сортируем для медианы
                     var sorted2 = testResults.OrderBy(x => x).ToArray();
@@ -298,4 +267,4 @@ namespace ConsoleApp1
             }
         }
     }
-}
+

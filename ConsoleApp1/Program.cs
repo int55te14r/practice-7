@@ -199,150 +199,102 @@ namespace ConsoleApp1
 
 
             //7: Каталог товаров
-            string[] products = {
-    "Ноутбук-50000-Электроника",
-    "Кресло-5000-Мебель",
-    "Монитор-15000-Электроника",
-    "Стол-8000-Мебель",
-    "Клавиатура-3000-Электроника",
-    "Лампа-2000-Мебель"
-};
-
-            // Фильтрация по категории
-            var electronics = products.Where(p => p.EndsWith("Электроника"));
-            Console.WriteLine("Электроника:");
-            foreach (var prod in electronics)
             {
-                var parts = prod.Split('-');
-                Console.WriteLine($"  - {parts[0]}: {parts[1]} руб.");
-            }
-
-            // Товары в диапазоне цены (3000-20000)
-            var priceRange = products.Where(p =>
-            {
-                int price = Convert.ToInt32(p.Split('-')[1]);
-                return price >= 3000 && price <= 20000;
-            });
-            Console.WriteLine("Товары от 3000 до 20000 руб.:");
-            foreach (var prod in priceRange)
-            {
-                Console.WriteLine($"  - {prod}");
-            }
-            // Отсортировано по цене
-            var byPrice = products.OrderBy(p => Convert.ToInt32(p.Split('-')[1]));
-            Console.WriteLine("Отсортировано по цене:");
-            foreach (var prod in byPrice)
-            {
-                var parts = prod.Split('-');
-                Console.WriteLine($"  - {parts[0]}: {parts[1]} руб.");
-            }
-            Console.WriteLine();
-
-
-            //8: Анализ результатов тестирования
-            int[] testResults = { 85, 92, 78, 95, 88, 76, 91, 87, 94, 81, 89, 77, 90, 86, 93 };
-
-            // Сортируем для медианы
-            var sorted2 = testResults.OrderBy(x => x).ToArray();
-            double median = sorted2.Length % 2 == 0
-                ? (sorted2[sorted2.Length / 2 - 1] + sorted2[sorted2.Length / 2]) / 2.0
-                : sorted2[sorted2.Length / 2];
-
-            Console.WriteLine($"Медиана: {median}");
-
-            // Среднее значение
-            double avgTest = testResults.Average();
-            Console.WriteLine($"Среднее значение: {avgTest:F2}");
-
-            // Топ 10% (лучших результатов)
-            int topCount = Math.Max(1, testResults.Length / 10);
-            var top10percent = testResults.OrderByDescending(x => x).Take(topCount);
-            Console.WriteLine($"Топ 10% результатов: {string.Join(", ", top10percent)}");
-
-            // Группировка по интервалам
-            Console.WriteLine("Группировка по интервалам:");
-            Console.WriteLine("70-79: " + testResults.Where(r => r >= 70 && r < 80).Count());
-            Console.WriteLine("80-89: " + testResults.Where(r => r >= 80 && r < 90).Count());
-            Console.WriteLine("90-100: " + testResults.Where(r => r >= 90 && r <= 100).Count());
-            Console.WriteLine();
-
-            //9: Система учета студентов
-            string[] students = {
-    "Иван-85-90-88",
-    "Мария-92-95-91",
-    "Петр-72-75-70",
-    "Анна-88-91-89",
-    "Сергей-65-60-62"
-};
-
-            // Студенты со средним баллом > 80 
-            Console.WriteLine("Студенты со средним баллом > 80:");
-            foreach (var student in students)
-            {
-                var parts = student.Split('-');
-                var name = parts[0];
-                var math = Convert.ToDouble(parts[1]);
-                var physics = Convert.ToDouble(parts[2]);
-                var chemistry = Convert.ToDouble(parts[3]);
-                var avg = (math + physics + chemistry) / 3.0;
-
-                if (avg > 80)
                 {
-                    Console.WriteLine($"  - {name}: {avg:F2}");
+                    string[] products =
+                    {
+            "Ноутбук-1200-Электроника",
+            "Смартфон-800-Электроника",
+            "Футболка-25-Одежда",
+            "Джинсы-60-Одежда",
+            "Кофеварка-150-БытоваяТехника",
+            "Микроволновка-200-БытоваяТехника",
+            "Наушники-100-Электроника",
+            "Кроссовки-80-Одежда",
+        };
+                    Console.WriteLine("КАТАЛОГ ТОВАРОВ");
+                    Console.WriteLine("Товары в диапазоне 50-200:");
+                    var priceRange = products.Where(p =>
+                    {
+                        var price = Convert.ToDouble(p.Split('-')[1]);
+                        return price >= 50 && price <= 200;
+                    });
+
+
+                    foreach (var product in priceRange)
+                    {
+                        var parts = product.Split('-');
+                        Console.WriteLine($"{parts[0]} - {parts[1]} - {parts[2]}");
+
+                    }
+                    Console.WriteLine();
+
+
+                    Console.WriteLine("Товары отсортированные по цене (возрастание):");
+                    var sortedByPriceAsc = products.OrderBy(p => Convert.ToDouble(p.Split('-')[1]));
+                    foreach (var product in sortedByPriceAsc)
+                    {
+                        var parts = product.Split('-');
+                        Console.WriteLine($"{parts[0]} - {parts[1]} - {parts[2]}");
+                    }
+                    Console.WriteLine();
+
+
+                    Console.WriteLine("Товары отсортированные по цене (убывание):");
+                    var sortedByPriceDesc = products.OrderByDescending(p => Convert.ToDouble(p.Split('-')[1]));
+                    foreach (var product in sortedByPriceDesc)
+                    {
+                        var parts = product.Split('-');
+                        Console.WriteLine($"{parts[0]} - {parts[1]} - {parts[2]}");
+                    }
+                    Console.WriteLine();
+
+                    Console.WriteLine("Количество товаров по категориям:");
+                    var categories = products.Select(p => p.Split('-')[2]).Distinct();
+                    foreach (var category in categories)
+                    {
+                        var count = products.Count(p => p.Split('-')[2] == category);
+                        Console.WriteLine($"{category}: {count} товаров");
+                        //Where() - фильтрация по условию
+
+                        //OrderBy() / OrderByDescending() - сортировка
+
+                        //First() - получение первого элемента
+
+                        //Average() - вычисление среднего значения
+
+                        //Count() - подсчет элементов
+
+                        //Select() + Distinct() - получение уникальных категорий
+                    }
+
+                    //8: Анализ результатов тестирования
+                    int[] testResults = { 85, 92, 78, 95, 88, 76, 91, 87, 94, 81, 89, 77, 90, 86, 93 };
+
+                    // Сортируем для медианы
+                    var sorted2 = testResults.OrderBy(x => x).ToArray();
+                    double median = sorted2.Length % 2 == 0
+                        ? (sorted2[sorted2.Length / 2 - 1] + sorted2[sorted2.Length / 2]) / 2.0
+                        : sorted2[sorted2.Length / 2];
+
+                    Console.WriteLine($"Медиана: {median}");
+
+                    // Среднее значение
+                    double avgTest = testResults.Average();
+                    Console.WriteLine($"Среднее значение: {avgTest:F2}");
+
+                    // Топ 10% (лучших результатов)
+                    int topCount = Math.Max(1, testResults.Length / 10);
+                    var top10percent = testResults.OrderByDescending(x => x).Take(topCount);
+                    Console.WriteLine($"Топ 10% результатов: {string.Join(", ", top10percent)}");
+
+                    // Группировка по интервалам
+                    Console.WriteLine("Группировка по интервалам:");
+                    Console.WriteLine("70-79: " + testResults.Where(r => r >= 70 && r < 80).Count());
+                    Console.WriteLine("80-89: " + testResults.Where(r => r >= 80 && r < 90).Count());
+                    Console.WriteLine("90-100: " + testResults.Where(r => r >= 90 && r <= 100).Count());
+                    Console.WriteLine();
                 }
-            }
-
-            // Отличники (средний > 90) 
-            Console.WriteLine("Отличники:");
-            var topStudents = from student in students
-                              let parts = student.Split('-')
-                              let name = parts[0]
-                              let math = Convert.ToDouble(parts[1])
-                              let physics = Convert.ToDouble(parts[2])
-                              let chemistry = Convert.ToDouble(parts[3])
-                              let avg = (math + physics + chemistry) / 3.0
-                              where avg > 90
-                              select name;
-
-            foreach (var name in topStudents)
-            {
-                Console.WriteLine($"  - {name}");
-            }
-
-            // Двоечники (средний < 70) 
-            Console.WriteLine("Двоечники:");
-            var poorStudents = from student in students
-                               let parts = student.Split('-')
-                               let name = parts[0]
-                               let math = Convert.ToDouble(parts[1])
-                               let physics = Convert.ToDouble(parts[2])
-                               let chemistry = Convert.ToDouble(parts[3])
-                               let avg = (math + physics + chemistry) / 3.0
-                               where avg < 70
-                               select name;
-
-            foreach (var name in poorStudents)
-            {
-                Console.WriteLine($"  - {name}");
-            }
-
-            // Рейтинг студентов
-            Console.WriteLine("Рейтинг студентов:");
-            var ranking = from student in students
-                          let parts = student.Split('-')
-                          let name = parts[0]
-                          let math = Convert.ToDouble(parts[1])
-                          let physics = Convert.ToDouble(parts[2])
-                          let chemistry = Convert.ToDouble(parts[3])
-                          let avg = (math + physics + chemistry) / 3.0
-                          orderby avg descending
-                          select new { Name = name, Average = avg };
-
-            int place = 1;
-            foreach (var student in ranking)
-            {
-                Console.WriteLine($"  {place}. {student.Name}: {student.Average:F2}");
-                place++;
             }
         }
     }
